@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>the DEN </title>
+</head>
+<body>
+	<h1> {{title}} </h1>
+	<p> {{content}} 
+
+
+	</p>
+	{% for item in articles %}
+
+		<ul>
+			<li> Rest. Name: {{item.name}}</li> 
+			<li>title: {{item.name}}</li> 
+			<li>Description: {{item.Description}}</li> 
+			<li>Content: {{item.content}}</li> 
+	<li>	<strong>Business STARTS At :</strong> {{item.opening}}</li> 
+		
+	<li> <strong> Business Sleeps AT : </strong> {{item.closing}} </li> 
+		</ul>
+		{% endfor %}
+</body>
+</html>
