@@ -21,7 +21,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('junks/', views.eat),
     path('nums/', views.list),
-    path('foos/', views.drink,name="name_detail"),
+    path('foos/', views.drink,name="list_list"),
     path('funny/', views.drinkeat),
-    path('nofunny/<int:name_id>/', views.eatdrinking, name="name_detail"),
+    path('nofunny/<int:name_id>/', views.eatdrinking, name="name_list"),
+    path('create/', views.create, name="business_create"),
+    path('update/<int:name_id>/', views.update, name="business_update"),
+    path('delete/<int:name_id>/', views.delete, name='delete'),
 ]

@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Business
+from .forms import BusinessesForm
 
 # Create your views here.
 def drink(request) : 
@@ -91,3 +92,46 @@ def list(request) :
 
 	}
 	return render(request,"foodz.html", context)
+
+
+
+def create(request) :
+	form = BusinessesForm()
+	if request.method == "POST":
+			form =BusinessesForm(request.POST)
+			if form.is_valid():
+				form.save()
+				return redirect('list_list')
+	context ={
+		"create_form" : form, 
+
+
+	}
+	return render(request, 'business_create.html', context)
+
+
+def update(request, name_id):
+	business_obj= Business.objects.get(id=name_id)
+	form  = BusinessesForm(instance = business_obj)
+	if request.method =="POST":
+		form =BusinessesForm(request.POST, instance = business_obj)
+		if form.is_valid():
+			form.save()
+			return redirect('list_list')
+
+	context ={
+		'business_obj' : business_obj,
+		"update_form": form,
+
+	}
+	return render(request, 'business_update.html',context)
+
+'''def post_delete(request, name_id):
+    instance = Business.objects.get(id=name_id)
+    instance.delete()
+    return redirect("name_detail")'''
+    
+def delete(request, name_id) :
+	Business.objects.get(id=name_id).delete()
+	return redirect("name_detail")
+	#name_detail is in the urls.py which will redirect the process to an html file 

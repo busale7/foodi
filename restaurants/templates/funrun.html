@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Fun FOOOD </title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block name_me %}
+Detail 
+{% endblock name_me %}
+{% block stuff %}
+
 		
 	<ul>
 		<li>Name :{{articles.name}} </li>
@@ -12,6 +11,8 @@
 		<li>Opening Time :{{articles.opening_time}} </li>
 		<li> Closing Time : {{articles.closing_time}}
 	</ul>
+<P> 
 
-</body>
-</html>
+<a href="{% url 'list_list' %}">BAACK</a>
+		</p>
+{% endblock stuff %}

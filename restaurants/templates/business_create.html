@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>create </title>
+</head>
+<body> 
+	<!-- we are telling the -->
+	<form action="{% url 'business_create' %}" method="post">{{create_form.as_p}}
+		{% csrf_token %} 
+	<input type="submit" value="Submit"></form>
+	
+	<!-- .as_p is to put the form things in vertical way*/ -->
+
+
+</body>
+</html>

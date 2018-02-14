@@ -8,5 +8,8 @@ class Business(models.Model):
 	opening_time = models.TimeField()
 	closing_time =models.TimeField()
 
+
 	def __str__(self) : # to set the name of the object in django admin
 		return self.name
+
+'''class Article(models.Model):'''

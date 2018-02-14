@@ -1,18 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Hello</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block name_me %}
+List
+{% endblock name_me %}
+{% block stuff %}
+
 	{% for item in articles %}
 	<ul>
 		
-<a href="{% url 'name_detail' name_id=item.id %}"<li> Name :{{item.name}} </li> </a>
+<a href="{% url 'name_list' name_id=item.id %}"><li> Name :{{item.name}} </li> </a>
 		<li>Description :{{item.description}} </li>
 		<li>Opening Time :{{item.opening_time}} </li>
-		<li> Closing Time : {{item.closing_time}}
+		<li> Closing Time : {{item.closing_time}} </li>
+		<li> <a href="{% url 'business_update' name_id=item.id %}"> update ME </a></li>
+		<li> <a href="{% url 'delete' name_id=item.id %}"> delete me </a> </li>
 	</ul>
 	{% endfor %}
-</body>
-</html>
+
+{% endblock stuff %}

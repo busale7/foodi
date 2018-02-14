@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>update</title>
+</head>
+<body>  <!-- the business_update is the variable in the urls.py file it tells is go to URL file and url file will send it bach to the view.py for the function in it -->
+	<form action="{% url 'business_update' name_id=business_obj.id %}" method="POST">
+				{% csrf_token %} 
+				{{update_form.as_p}}
+				<input type="submit" value ="Update">
+
+	</form>
+</body>
+</html>
