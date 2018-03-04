@@ -1,0 +1,10 @@
+.Coded { 
+	background-color: lightblue ;
+
+}
+.center {
+    margin: auto;
+    width: 60%;
+    border: 3px solid ;
+    padding: 10px;
+}

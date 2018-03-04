@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Business
-from .forms import BusinessesForm
+from .models import Business , Items, favorit, favorits
+from django.http import JsonResponse
+from .forms import BusinessesForm ,SignupForm, LoginForm, ItemForm
+from django.contrib.auth import authenticate , login ,logout
+from django.contrib.auth.models import User
 
 # Create your views here.
 def drink(request) : 
@@ -11,9 +14,16 @@ def drink(request) :
  	}
  	return render(request,"foody.html", context)
 
+def item_list(request):
+	context ={
+		"itemss": Items.objects.all(),
+	
+	}
+	return render(request,"itemslist.html",context)
+
 def drinkeat(request) : 
  	context ={
- 		"subjects" : Business.objects.get(name="JORDAN'S DEN"),
+ 		"subjects" : Business.objects.get(id=1),
 
 
  	}
@@ -26,6 +36,14 @@ def eatdrinking(request,name_id):
 
  	}
  	return render(request,"funrun.html", context)
+
+def item_detail(request,item_id): 
+ 	context ={
+ 		"itemz" : Items.objects.get(id=item_id),
+
+
+ 	}
+ 	return render(request,"itemsdetail.html", context)
 
 def eat(request) : 
  	context ={
@@ -98,12 +116,14 @@ def list(request) :
 def create(request) :
 	form = BusinessesForm()
 	if request.method == "POST":
-			form =BusinessesForm(request.POST)
+			form =BusinessesForm(request.POST, request.FILES or None)
 			if form.is_valid():
-				form.save()
+				business_object =form.save(commit=False)
+				business_object.restaurant= User.objects.get(id=request.user.id)
+				business_object.save()
 				return redirect('list_list')
 	context ={
-		"create_form" : form, 
+		"create_form" : form
 
 
 	}
@@ -126,12 +146,136 @@ def update(request, name_id):
 	}
 	return render(request, 'business_update.html',context)
 
+def items_update(request, item_id):
+	item_obj= Items.objects.get(id=item_id)
+	form  = ItemForm(instance = item_obj)
+	if request.method =="POST":
+		form =ItemForm(request.POST, instance = item_obj)
+		if form.is_valid():
+			form.save()
+			return redirect('item_item')
+
+	context ={
+		'item_obj' : item_obj,
+		"item_update_form": form,
+
+	}
+	return render(request, 'item_update.html',context)
+
 '''def post_delete(request, name_id):
     instance = Business.objects.get(id=name_id)
     instance.delete()
-    return redirect("name_detail")'''
+    return redirect("name_detail")
+	i changed name_detail to list_list
+    '''
     
 def delete(request, name_id) :
 	Business.objects.get(id=name_id).delete()
-	return redirect("name_detail")
+	return redirect("list_list")
 	#name_detail is in the urls.py which will redirect the process to an html file 
+
+def delete_item(request, item_id) :
+	Items.objects.get(id=item_id).delete()
+	return redirect("item_item")
+	#name_detail is in the urls.py which will redirect the process to an html file 
+
+def signup(request):
+	form =SignupForm()
+	if request.method =="POST":
+		form = SignupForm(request.POST)
+		if form.is_valid():   #request.method =="POST":
+			user =form.save(commit=False)
+			user.set_password(user.password)
+			user.save()
+			login(request, user)
+			return redirect("list_list")
+	context ={
+		"form":form
+	}
+	return render(request, 'signup.html', context)
+
+def user_login(request):
+	form = LoginForm()
+	if request.method =="POST":
+		form = LoginForm(request.POST)
+		if form.is_valid():
+			username = form.cleaned_data['username']
+			password = form.cleaned_data['password']
+			authen = authenticate(username=username ,password=password)
+			if authen is not None:
+				login(request, authen)
+				return redirect("list_list")
+	context ={
+		"form":form
+	}
+	return render(request, 'login.html', context)
+
+
+def user_logout(request):
+	logout(request)
+	return redirect('login')
+
+
+
+def create_Item(request ,name_id) :
+	business=Business.objects.get(id=name_id)
+	form = ItemForm()
+	if request.method == "POST":
+		form =ItemForm(request.POST)
+		if form.is_valid():
+			item_obj = form.save(commit=False)
+			item_obj.restaurant = business
+			item_obj.save()
+			return redirect('item_item')
+	context ={
+		"Item_form" : form,
+		"name_id": name_id,
+
+
+	}
+	return render(request, 'create_item.html', context)
+
+
+
+def like(request, business_id):
+	favorit_obj = Business.objects.get(id=business_id)
+	buz_obj, created = favorit.objects.get_or_create(user=request.user, restaurant=favorit_obj)
+	if created :
+		action="favorit"
+	else: 
+		action="Not favorit"
+		buz_obj.delete()
+	
+	favorit_count = favorit_obj.favorit_set.all().count()
+
+	#message="HEllo"
+	context={
+		#"message": message 
+		"action":action,
+		"count":favorit_count,
+
+
+	}
+	return JsonResponse(context,safe=False)
+
+def likes(request, items_id):
+	likes_obj = Items.objects.get(id=items_id)
+	buzz_obj, created = favorits.objects.get_or_create(user=request.user, item=likes_obj)
+	if created :
+		action="favorit"
+	else: 
+		action="Not favorit"
+		buzz_obj.delete()
+	
+	favorits_count = likes_obj.favorits_set.all().count()
+
+	#message="HEllo"
+	context={
+		#"message": message 
+		"action":action,
+		"count":favorits_count,
+
+
+	}
+	return JsonResponse(context,safe=False)
+

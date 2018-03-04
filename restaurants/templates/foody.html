@@ -1,19 +1,78 @@
+<!-- this is the page for listing all businesses-->
 {% extends "base.html" %}
 {% block name_me %}
 List
 {% endblock name_me %}
 {% block stuff %}
-
+<br>
+<div class="row center" >
 	{% for item in articles %}
-	<ul>
-		
-<a href="{% url 'name_list' name_id=item.id %}"><li> Name :{{item.name}} </li> </a>
-		<li>Description :{{item.description}} </li>
-		<li>Opening Time :{{item.opening_time}} </li>
-		<li> Closing Time : {{item.closing_time}} </li>
-		<li> <a href="{% url 'business_update' name_id=item.id %}"> update ME </a></li>
-		<li> <a href="{% url 'delete' name_id=item.id %}"> delete me </a> </li>
-	</ul>
+	<div class="col-md-6">
+		<div class="card border-secondary mb-3">
+			<div class="alert alert-warning alert-dismissible fade show" role="alert">
+ 		 <strong>Attention ! </strong>  Deleting an entry , Can't be reversed  !
+  		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  		  <span aria-hidden="true">&times;</span> <!-- this is code for attention message-->
+ 		 </button>
+	</div>
+		  <div class="card-header"><a href="{% url 'name_list' name_id=item.id %}" class="btn btn-info"> Name :{{item.name}}  </a>
+		</div>
+		<div align="center"> 
+		{% if item.image %}
+		<img class="card-img-top" style="width: 6rem;" src="{{item.image.url}}" alt="Card image cap"> 
+		{% endif %}
+		</div> 
+		  <div class="card-body text-secondary">
+		    <h5 class="card-title">Description :{{item.description}} </h5>
+		    <p class="card-text">Opening Time :{{item.opening_time}}</p>
+		    <p class="card-text">Closing Time : {{item.closing_time}} </p>
+		    <p class="card-text">Business Add on : {{item.add_date}} </p> 
+			<button class="btn btn-secondary" onclick="Hello({{item.id}})">
+				<span id="waink-number-{{item.id}}"> 0</span>
+		    	<i id="waink-color-{{item.id}}"class="far fa-thumbs-up"></i>
+			</button>
+			<br>
+				<p>
+					<!--
+				<button class="btn btn-secondary" onclick="hey()">
+					<span> 12</span>
+			    	<i class="far fa-thumbs-down"></i>
+				</button>
+				</p> -->
+		  </div>
+
+		</div>
+		<a href="{% url 'business_update' name_id=item.id %}" class="btn btn-info"> Update </a> 
+		<a href="{% url 'delete' name_id=item.id %}" class="btn btn-secondary" > Delete </a>
+	<P> </P>
+	</div>
+
+<br>
+	 
 	{% endfor %}
 
+</div>
+<br>
+<script> function Hello(id) {
+			
+			$.ajax({
+				type:"GET",
+				url:"/like/"+id,
+				error:function(){console.log("Failed!! ")},
+				success:function(data){
+					console.log(data);
+					$("#waink-number-"+id).text(data.count);
+					if(data.action==="favorit"){
+						$("#waink-color-"+id).addClass("text-danger");
+
+					}
+					else {
+						$("#waink-color-"+id).removeClass("text-danger");
+						}
+				}
+			})
+}
+
+
+</script>
 {% endblock stuff %}

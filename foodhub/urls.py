@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from restaurants import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,7 +26,23 @@ urlpatterns = [
     path('foos/', views.drink,name="list_list"),
     path('funny/', views.drinkeat),
     path('nofunny/<int:name_id>/', views.eatdrinking, name="name_list"),
+    path('idetail/<int:item_id>/', views.item_detail, name="items_detail"),
     path('create/', views.create, name="business_create"),
     path('update/<int:name_id>/', views.update, name="business_update"),
+    path('iupdate/<int:item_id>/', views.items_update, name="item_update"),
     path('delete/<int:name_id>/', views.delete, name='delete'),
+    path('idelete/<int:item_id>/', views.delete_item, name='itemdelete'),
+    path('',views.drink,name="list_list"),
+    path('item/',views.item_list,name="item_item"),
+    path('signup/',views.signup, name="signup_list"),
+    path('login/',views.user_login, name="login"),
+    path('logout/',views.user_logout, name="logout"),
+    path('add/<int:name_id>/',views.create_Item, name="add_item"),
+    path('like/<int:business_id>',views.like, name="like-button"),
+    path('likes/<int:items_id>',views.likes, name="like-button"),
 ]
+
+if settings.DEBUG:
+    urlpatterns +=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns +=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

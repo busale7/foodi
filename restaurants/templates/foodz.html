@@ -6,10 +6,8 @@
 </head>
 <body>
 	<h1> {{title}} </h1>
-	<p> {{content}} 
-
-
-	</p>
+	<p> {{image}} </p>
+	<p> {{content}} </p>
 	{% for item in articles %}
 
 		<ul>
@@ -20,6 +18,7 @@
 	<li>	<strong>Business STARTS At :</strong> {{item.opening}}</li> 
 		
 	<li> <strong> Business Sleeps AT : </strong> {{item.closing}} </li> 
+	<li> Rest. Added on : {{item.add_date}} </li>
 		</ul>
 		{% endfor %}
 </body>

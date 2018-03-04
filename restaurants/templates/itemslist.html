@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block name_me %}
+Items list 
+{% endblock name_me %}
+{% block stuff %}
+{% load crispy_forms_tags %}
+<br>
+<div class="row center" >
+	{% for thing in itemss %}
+	<div class="col-md-6">
+		<div class="card-header">
+				<a href="{% url 'items_detail' item_id=thing.id %}" class="btn btn-info">
+					Name :{{thing.item_name}}
+				</a>
+
+				<div class="card-body text-secondary">
+					<h5 class="card-title">Description :{{thing.descrip}} </h5>
+					<p class="card-text">Restaurant  :{{thing.restaurant}}</p>
+					<p class="card-text">Price: {{thing.price}} </p>
+						<button class="btn btn-secondary" onclick="hey({{thing.id}})">
+										<span id="wain-number-{{thing.id}}"> 0</span>
+		    	<i id="wain-color-{{thing.id}}"class="far fa-thumbs-up"></i>
+						</button>
+				</div>
+
+		</div>
+		<a href="{% url 'item_update' item_id=thing.id %}" class="btn btn-info"> Update </a> 
+		<a href="{% url 'itemdelete' item_id=thing.id %}" class="btn btn-secondary" > Delete </a>
+	</div>
+
+<br>
+	  
+	{% endfor %}
+</div>
+<br>
+<script> function hey(id) {
+			
+			$.ajax({
+				type:"GET",
+				url:"/likes/"+id,
+				error:function(){console.log("items Failed!! ")},
+				success:function(data){
+					console.log(data);
+					$("#wain-number-"+id).text(data.count);
+					if(data.action==="favorit"){
+						$("#wain-color-"+id).addClass("text-danger");
+
+					}
+					else {
+						$("#wain-color-"+id).removeClass("text-danger");
+						}
+				}
+			})
+}
+
+
+</script>
+
+{% endblock stuff %}

@@ -1,0 +1,24 @@
+<!-- this is the page for specific business -->
+{% extends "base.html" %}
+{% block name_me %}
+Detail 
+{% endblock name_me %}
+{% block stuff %}
+<div class="container">
+	<div class="card" style="width: 18rem;" align="center">
+	  <h5 class="card-header">Name :{{itemz.item_name}}</h5>
+
+	 
+	 
+	    <h6 class="card-title">Description :{{itemz.descrip}}</h6>
+	  	    <p class="card-text">Restaurant  :{{itemz.restaurant}} </p>
+	   
+	
+	</div>
+</div>
+
+	<br>
+
+<a href="{% url 'item_item' %}" class="btn btn-secondary">BACK</a>
+		</p>
+{% endblock stuff %}

@@ -1,18 +1,29 @@
+<!-- this is the page for specific business -->
 {% extends "base.html" %}
 {% block name_me %}
 Detail 
 {% endblock name_me %}
 {% block stuff %}
+<div class="container">
+	<div class="card" style="width: 18rem;" align="center">
+	  <h5 class="card-header">Name :{{articles.name}} </h5>
+	  
 
-		
-	<ul>
-		<li>Name :{{articles.name}} </li>
-		<li>Description :{{articles.description}} </li>
-		<li>Opening Time :{{articles.opening_time}} </li>
-		<li> Closing Time : {{articles.closing_time}}
-	</ul>
-<P> 
+	  	{% if articles.image %}
+		<img class="card-img-top" style="width: 6rem;" src="{{articles.image.url}}" alt="Card image cap">
+		{% endif %}
+	  <div class="card-body Coded">
+	    <h5 class="card-title">Opening Time :{{articles.opening_time}}</h5>
+	    <p class="card-text">Description :{{articles.description}} </p>
+	    <p class="card-text">Business Add on  :{{articles.add_date}} </p>
+	   <p class="btn btn-primary">Closing Time : {{articles.closing_time}}</p>
+	  </div>
+	</div>
+</div>
 
-<a href="{% url 'list_list' %}">BAACK</a>
+	<br>
+
+<a href="{% url 'list_list' %}" class="btn btn-secondary">BACK</a>
+ <button class="btn btn-outline-success" type="button"><a href="{% url 'add_item' name_id=articles.id %}">create item</button> </a>
 		</p>
 {% endblock stuff %}

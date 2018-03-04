@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Fun FOOOD </title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block name_me %}
+FUN
+{% endblock name_me %}
+{% block stuff %}
 		{{subjects}}
+		
 		<P> 
 
-<a href="{% url 'name_detail' %}">BAACK</a>
+<a href="{% url 'list_list' %}" class="alert-link">BAACK</a>
 		</p>
 
-</body>
-</html>
+{% endfor %}
+
+{% endblock stuff %}

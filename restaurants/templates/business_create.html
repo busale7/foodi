@@ -1,17 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>create </title>
-</head>
-<body> 
+{% extends "base.html" %}
+{% block name_me %}
+create
+{% endblock name_me %}
+{% block stuff %}
+{% load crispy_forms_tags %}
+ 
+ <div class="container">
 	<!-- we are telling the -->
-	<form action="{% url 'business_create' %}" method="post">{{create_form.as_p}}
+	<div class=" row">
+	<form action="{% url 'business_create' %}"  method="post" enctype ="multipart/form-data">{{create_form|crispy}}
 		{% csrf_token %} 
-	<input type="submit" value="Submit"></form>
+	<input type="submit" value="Submit" class="btn btn-lg btn-primary"></form>
 	
 	<!-- .as_p is to put the form things in vertical way*/ -->
+	</div>
+</div>
 
 
-</body>
-</html>
+
+
+{% endblock stuff %}
