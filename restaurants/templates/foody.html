@@ -27,9 +27,10 @@ List
 		    <p class="card-text">Opening Time :{{item.opening_time}}</p>
 		    <p class="card-text">Closing Time : {{item.closing_time}} </p>
 		    <p class="card-text">Business Add on : {{item.add_date}} </p> 
+		    <p class="card-text">Business owner : {{item.owner}} </p> 
 			<button class="btn btn-secondary" onclick="Hello({{item.id}})">
-				<span id="waink-number-{{item.id}}"> 0</span>
-		    	<i id="waink-color-{{item.id}}"class="far fa-thumbs-up"></i>
+				<span id="waink-number-{{item.id}}"> {{item.favorit_set.all.count}}</span>
+		    	<i id="waink-color-{{item.id}}"class="far fa-thumbs-up {% if item in my_likes %}text-danger{% endif%}"></i>
 			</button>
 			<br>
 				<p>

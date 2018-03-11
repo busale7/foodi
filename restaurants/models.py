@@ -10,6 +10,7 @@ class Business(models.Model):
 	closing_time =models.TimeField()
 	image = models.ImageField(null=True)
 	add_date =models.DateField()
+	owner =models.ForeignKey(User, default=1, on_delete=models.CASCADE)
 
 	def __str__(self) : # to set the name of the object in django admin
 		return self.name

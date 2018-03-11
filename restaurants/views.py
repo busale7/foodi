@@ -1,18 +1,38 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Business , Items, favorit, favorits
-from django.http import JsonResponse
+from django.http import JsonResponse ,Http404 , HttpResponse
 from .forms import BusinessesForm ,SignupForm, LoginForm, ItemForm
 from django.contrib.auth import authenticate , login ,logout
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 # Create your views here.
 def drink(request) : 
+	if request.user.is_anonymous:
+		returnredirect('list_list')
+	object_list = Business.objects.all()
+	object_list =object_list.order_by('name', 'add_date')
+	query =request.GET.get('q')
+	if query:
+		object_list=object_list.filter(title_contains=query)
+
+	liked_posts =[]
+	likes =request.user.favorit_set.all()
+	for like in likes: 
+		liked_posts.append(like.restaurant)
+	context={
+		"articles" : object_list,
+		"my_likes": liked_posts,
+	}
+	return render(request, "foody.html", context)
+
+'''def drink(request) : 
  	context ={
  		"articles" : Business.objects.all(),
 
  	}
- 	return render(request,"foody.html", context)
+ 	return render(request,"foody.html", context)'''
 
 def item_list(request):
 	context ={
@@ -114,25 +134,44 @@ def list(request) :
 
 
 def create(request) :
-	form = BusinessesForm()
-	if request.method == "POST":
-			form =BusinessesForm(request.POST, request.FILES or None)
-			if form.is_valid():
-				business_object =form.save(commit=False)
-				business_object.restaurant= User.objects.get(id=request.user.id)
-				business_object.save()
-				return redirect('list_list')
+	'''if not (request.user.is_staff or request.user.is_superuser):
+					raise Http404'''
+	form = BusinessesForm(request.POST or None , request.FILES or None)
+	if form.is_valid():
+		post =form.save(commit= False)
+		post.owner=request.user
+		post.save()
+		messages.success(request,"Successfully Created")
+		return redirect('list_list')
 	context ={
 		"create_form" : form
-
-
-	}
+			
+			
+				}
 	return render(request, 'business_create.html', context)
+	
 
+	'''if request.method == "POST":
+						form =BusinessesForm(request.POST, request.FILES or None)
+						if form.is_valid():
+							business_object =form.save(commit=False)
+							business_object.restaurant= User.objects.get(id=request.user.id)
+							business_object.save()
+							return redirect('list_list')
+				context ={
+					"create_form" : form
+			
+			
+				}
+				return render(request, 'business_create.html', context)
+			'''
 
 def update(request, name_id):
 	business_obj= Business.objects.get(id=name_id)
 	form  = BusinessesForm(instance = business_obj)
+	if not(request.user.is_staff or request.user==business_obj.owner):
+		#raise Http404
+		return HttpResponse("<h1> AMIGO YOU CANT ACCESS the page!</h1>")
 	if request.method =="POST":
 		form =BusinessesForm(request.POST, instance = business_obj)
 		if form.is_valid():
@@ -170,6 +209,8 @@ def items_update(request, item_id):
     '''
     
 def delete(request, name_id) :
+	if not (request.user.is_staff or request.user.is_superuser):
+		raise Http404
 	Business.objects.get(id=name_id).delete()
 	return redirect("list_list")
 	#name_detail is in the urls.py which will redirect the process to an html file 
