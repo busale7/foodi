@@ -18,8 +18,8 @@ Items list
 					<p class="card-text">Restaurant  :{{thing.restaurant}}</p>
 					<p class="card-text">Price: {{thing.price}} </p>
 						<button class="btn btn-secondary" onclick="hey({{thing.id}})">
-										<span id="wain-number-{{thing.id}}"> 0</span>
-		    	<i id="wain-color-{{thing.id}}"class="far fa-thumbs-up"></i>
+										<span id="wain-number-{{thing.id}}"> {{thing.favorits_set.all.count}}</span>
+		    	<i id="wain-color-{{thing.id}}"class="far fa-thumbs-up {% if item in my_like %}text-danger{% endif%}"></i>
 						</button>
 				</div>
 

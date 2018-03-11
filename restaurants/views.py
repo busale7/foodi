@@ -35,8 +35,21 @@ def drink(request) :
  	return render(request,"foody.html", context)'''
 
 def item_list(request):
+	if request.user.is_anonymous:
+		returnredirect('item_item')
+	object_list = Items.objects.all()
+	object_list =object_list.order_by('name', 'add_date')
+	query =request.GET.get('q')
+	if query:
+		object_list=object_list.filter(title_contains=query)
+
+	liked_posts =[]
+	likes =request.user.favorits_set.all()
+	for like in likes: 
+		liked_posts.append(like.item)
 	context ={
 		"itemss": Items.objects.all(),
+		"my_like": liked_posts,
 	
 	}
 	return render(request,"itemslist.html",context)
