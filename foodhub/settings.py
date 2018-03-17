@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '523&qtc277i$=@qq1^)ig__wnzoq6(hj87e_uu=n^)_c1i&^gp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['46.101.152.169','127.0.0.1']
 
 
 # Application definition
@@ -75,14 +75,27 @@ WSGI_APPLICATION = 'foodhub.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
+if DEBUG:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+else: 
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django',
+        'USER' :'django',
+        'PASSWORD' :'6370fc1cdfaeab5443b7cc21fdc4e418',
+        'HOST' : 'localhost',
+        'PORT': '',
+
+
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
